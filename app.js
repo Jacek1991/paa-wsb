@@ -1,4 +1,5 @@
 const Koa = require('koa')
+require('./store').init()
 const app = new Koa()
 const views = require('koa-views')
 const json = require('koa-json')
