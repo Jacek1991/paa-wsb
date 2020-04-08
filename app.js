@@ -1,4 +1,5 @@
 const Koa = require('koa')
+const tasks = require("./routes/tasks")
 require('./store').init()
 const azure = require("azure-storage")
 const app = new Koa()
@@ -25,7 +26,12 @@ app.use(require('koa-static')(__dirname + '/public'))
 app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
+
+app.use(tasks.routes(), tasks.allowedMethods());
+
 var retryOperations = new azure.ExponentialRetryPolicyFilter();
+
+
 var tableSvc = azure.createTableService().withFilter(retryOperations);
 // logger
 app.use(async (ctx, next) => {
